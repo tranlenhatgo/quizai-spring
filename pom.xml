@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.myproject</groupId>
-	<artifactId>quizzai_spring</artifactId>
+	<artifactId>quizai_spring</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>QuizzAIOnline</name>
-	<description>Demo project for Spring Boot</description>
+	<name>QuizAIOnline</name>
+	<description>Back end</description>
 	<url/>
 	<licenses>
 		<license/>
