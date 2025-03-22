@@ -7,25 +7,19 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+public class Category {
 
-public class Quiz {
     @DocumentId
     private String id;
-    private String host_id;
-    private String topic_id;
-    private String title;
+    private String creator_id;
+    private String name;
     private String description;
     private Status status;
-    private List<String> categories_id;
-    private String code;
-    private Timestamp start_time;
-    private Timestamp end_time;
+    private String image;
     private Timestamp createdAt;
     private Timestamp updatedAt;
 }

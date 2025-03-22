@@ -17,7 +17,6 @@ import java.io.FileInputStream;
 @RequiredArgsConstructor
 public class FirebaseConfiguration {
 
-
     @Bean
     @SneakyThrows
     public FirebaseApp firebaseApp() {
