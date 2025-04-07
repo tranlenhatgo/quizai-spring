@@ -20,7 +20,7 @@ public class FirebaseConfiguration {
     @Bean
     @SneakyThrows
     public FirebaseApp firebaseApp() {
-        final var serviceAccountKeyPath = "src/main/resources/serviceAccountKey.json";
+        final var serviceAccountKeyPath = "C:/codespace/quiz-ai-online/quizai-spring/src/main/resources/serviceAccountKey.json";
         FileInputStream serviceAccount = new FileInputStream(serviceAccountKeyPath);
         FirebaseOptions options = FirebaseOptions.builder()
                 .setCredentials(GoogleCredentials.fromStream(serviceAccount))
