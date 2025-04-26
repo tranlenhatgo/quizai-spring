@@ -1,6 +1,7 @@
 package com.myproject.quizzai.controller;
 
 import com.myproject.quizzai.dto.QuizCreationRequestDto;
+import com.myproject.quizzai.dto.QuizResponseDto;
 import com.myproject.quizzai.service.QuizService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -34,17 +35,17 @@ public class QuizController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-//    @GetMapping
-//    @Operation(summary = "Get quiz by ID")
-//    public ResponseEntity<QuizCreationRequestDto> getQuizById(@RequestParam String id) {
-//        Logger logger = LoggerFactory.getLogger(QuizController.class);
-//        logger.info("getQuizById() method called with ID: {}", id);
-//
-//        QuizCreationRequestDto quiz = quizService.getQuizById(id);
-//        if (quiz != null) {
-//            return ResponseEntity.ok(quiz);
-//        } else {
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-//        }
-//    }
+    @GetMapping
+    @Operation(summary = "Get quiz by ID")
+    public ResponseEntity<QuizResponseDto> getQuizById(@RequestParam String id) {
+        Logger logger = LoggerFactory.getLogger(QuizController.class);
+        logger.info("getQuizById() method called with ID: {}", id);
+
+        QuizResponseDto quiz = quizService.getQuizById(id);
+        if (quiz != null) {
+            return ResponseEntity.ok(quiz);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
 }

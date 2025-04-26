@@ -2,16 +2,16 @@ package com.myproject.quizzai.exceptions;
 
 import java.io.Serial;
 
-public class QuizZzException extends RuntimeException {
+public class QuizException extends RuntimeException {
 
     @Serial
     private static final long serialVersionUID = 1L;
 
-    public QuizZzException() {
+    public QuizException() {
         super();
     }
 
-    public QuizZzException(String message) {
+    public QuizException(String message) {
         super(message);
     }
 }

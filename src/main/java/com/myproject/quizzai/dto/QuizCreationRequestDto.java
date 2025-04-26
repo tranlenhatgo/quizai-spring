@@ -12,16 +12,11 @@ import java.util.List;
 
 @Getter
 @Setter
-//@JsonNaming(value = PropertyNamingStrategies.UpperCamelCaseStrategy.class)
 @Schema(title = "Quiz Creation Request DTO", accessMode = Schema.AccessMode.WRITE_ONLY)
 public class QuizCreationRequestDto {
     @NotBlank(message = "Host ID cannot be blank")
     @Schema(requiredMode = Schema.RequiredMode.REQUIRED)
     private String host_id;
-
-    @NotBlank(message = "Topic ID cannot be blank")
-    @Schema(requiredMode = Schema.RequiredMode.REQUIRED)
-    private String topic_id;
 
     @NotBlank(message = "Title cannot be blank")
     @Schema(requiredMode = Schema.RequiredMode.REQUIRED)
@@ -47,5 +42,7 @@ public class QuizCreationRequestDto {
     @Schema(description = "Last updated timestamp of the quiz")
     @JsonDeserialize(using = TimestampDeserializer.class)
     private Timestamp updated_at;
+
+
 }
 

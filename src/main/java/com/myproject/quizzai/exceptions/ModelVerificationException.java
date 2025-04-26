@@ -2,7 +2,7 @@ package com.myproject.quizzai.exceptions;
 
 import java.io.Serial;
 
-public class ModelVerificationException extends QuizZzException {
+public class ModelVerificationException extends QuizException {
 
     @Serial
     private static final long serialVersionUID = 1L;

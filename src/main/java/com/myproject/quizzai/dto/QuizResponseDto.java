@@ -1,21 +1,19 @@
-package com.myproject.quizzai.model;
+package com.myproject.quizzai.dto;
 
 import com.google.cloud.Timestamp;
-import com.google.cloud.firestore.annotation.DocumentId;
-import lombok.AllArgsConstructor;
+import com.myproject.quizzai.model.Status;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
-public class Quiz {
-
-    @DocumentId
+@Schema(title = "QuizResponse", accessMode = Schema.AccessMode.READ_ONLY)
+public class QuizResponseDto {
     private String id;
     private String host_id;
     private String title;
