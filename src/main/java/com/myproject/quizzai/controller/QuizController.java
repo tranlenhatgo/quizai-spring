@@ -23,13 +23,12 @@ public class QuizController {
 
     private final QuizService quizService;
 
+    private static final Logger logger = LoggerFactory.getLogger(QuizController.class);
+
     @PostMapping
     @Operation(summary = "Create a new quiz")
     public ResponseEntity<HttpStatus> create(@Valid @RequestBody QuizCreationRequestDto quizCreationRequest) {
-
-        Logger logger = LoggerFactory.getLogger(QuizController.class);
         logger.info("create() method called with request: {}", quizCreationRequest);
-
 
         quizService.create(quizCreationRequest);
         return ResponseEntity.status(HttpStatus.CREATED).build();
@@ -38,7 +37,6 @@ public class QuizController {
     @GetMapping
     @Operation(summary = "Get quiz by ID")
     public ResponseEntity<QuizResponseDto> getQuizById(@RequestParam String id) {
-        Logger logger = LoggerFactory.getLogger(QuizController.class);
         logger.info("getQuizById() method called with ID: {}", id);
 
         QuizResponseDto quiz = quizService.getQuizById(id);
