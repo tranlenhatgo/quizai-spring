@@ -1,4 +1,4 @@
-package com.myproject.quizzai.controller.utils;
+package com.myproject.quizzai.utils;
 
 import com.myproject.quizzai.exceptions.ModelVerificationException;
 import org.slf4j.Logger;

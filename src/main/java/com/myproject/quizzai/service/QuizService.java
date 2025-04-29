@@ -1,7 +1,7 @@
 package com.myproject.quizzai.service;
 
 import com.google.cloud.firestore.Firestore;
-import com.myproject.quizzai.controller.utils.IdUtil;
+import com.myproject.quizzai.utils.IdUtil;
 import com.myproject.quizzai.dto.QuizCreationRequestDto;
 import com.myproject.quizzai.dto.QuizResponseDto;
 import com.myproject.quizzai.model.Quiz;
@@ -9,8 +9,6 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
-
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor

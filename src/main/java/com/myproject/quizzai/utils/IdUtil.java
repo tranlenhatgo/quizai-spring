@@ -1,4 +1,4 @@
-package com.myproject.quizzai.controller.utils;
+package com.myproject.quizzai.utils;
 
 import java.util.UUID;
 

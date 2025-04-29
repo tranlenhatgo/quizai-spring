@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @Tag(name = "Quiz Controller", description = "Controller for managing quizzes")
 public class QuizController {
-    public static final String ROOT_MAPPING = "/api/quizzes";
+    public static final String ROOT_MAPPING = "quiz";
 
     private final QuizService quizService;
 
@@ -27,11 +27,13 @@ public class QuizController {
 
     @PostMapping
     @Operation(summary = "Create a new quiz")
-    public ResponseEntity<HttpStatus> create(@Valid @RequestBody QuizCreationRequestDto quizCreationRequest) {
+    public ResponseEntity<String> create(@Valid @RequestBody QuizCreationRequestDto quizCreationRequest) {
         logger.info("create() method called with request: {}", quizCreationRequest);
 
-        quizService.create(quizCreationRequest);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        String quizId = quizService.create(quizCreationRequest);
+        logger.info("ResponseEntity: {}", ResponseEntity.status(HttpStatus.CREATED).body(quizId));
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(quizId);
     }
 
     @GetMapping

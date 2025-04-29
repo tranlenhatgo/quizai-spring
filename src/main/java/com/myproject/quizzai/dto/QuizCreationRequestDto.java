@@ -2,7 +2,7 @@ package com.myproject.quizzai.dto;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.google.cloud.Timestamp;
-import com.myproject.quizzai.controller.utils.TimestampDeserializer;
+import com.myproject.quizzai.utils.TimestampDeserializer;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;

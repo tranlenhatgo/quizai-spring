@@ -1,4 +1,4 @@
-package com.myproject.quizzai.controller.utils;
+package com.myproject.quizzai.utils;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
