@@ -13,6 +13,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
 
 @RestController
 @RequestMapping(QuizController.ROOT_MAPPING)
@@ -25,17 +28,21 @@ public class QuizController {
 
     private static final Logger logger = LoggerFactory.getLogger(QuizController.class);
 
+
     @PostMapping
     @Operation(summary = "Create a new quiz")
-    public ResponseEntity<String> create(@Valid @RequestBody QuizCreationRequestDto quizCreationRequest) {
+    public ResponseEntity<Map<String, String>> create(@Valid @RequestBody QuizCreationRequestDto quizCreationRequest) {
         logger.info("create() method called with request: {}", quizCreationRequest);
 
         String quizId = quizService.create(quizCreationRequest);
-        logger.info("ResponseEntity: {}", ResponseEntity.status(HttpStatus.CREATED).body(quizId));
+        //create a json for response
+        Map<String, String> response = new HashMap<>();
+        response.put("quizId", quizId);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(quizId);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
+    //GET /quiz?id={id}
     @GetMapping
     @Operation(summary = "Get quiz by ID")
     public ResponseEntity<QuizResponseDto> getQuizById(@RequestParam String id) {

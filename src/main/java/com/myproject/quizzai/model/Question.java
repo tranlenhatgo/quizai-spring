@@ -16,11 +16,9 @@ public class Question {
     @DocumentId
     private String id;
     private String quiz_id;
-    private String category_id;
     private String content;
     private List<String> answers;
-    private Integer correct_answer;
-    private String score;
+    private String correct_answer;
     private Status status;
     private Timestamp createdAt;
     private Timestamp updatedAt;

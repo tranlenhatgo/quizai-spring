@@ -1,9 +1,20 @@
 package com.myproject.quizzai.controller;
 
+import com.myproject.quizzai.dto.QuestionCreationRequestDto;
+import com.myproject.quizzai.model.Question;
+import com.myproject.quizzai.service.QuestionService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping(QuestionController.ROOT_MAPPING)
@@ -12,5 +23,20 @@ import org.springframework.web.bind.annotation.RestController;
 public class QuestionController {
     public static final String ROOT_MAPPING = "question";
 
+    private final QuestionService questionService;
+
+    private static final Logger logger = LoggerFactory.getLogger(QuestionController.class);
+
+    //POST /questions
+    @PostMapping
+    @Operation(summary = "Create a list of questions for a quiz")
+    public ResponseEntity<Map<String,String>> createQuestions(
+            @RequestBody List<QuestionCreationRequestDto> questionDtos) {
+        logger.info("createQuestions() method called");
+
+        Map<String,String> result = questionService.createQuestions(questionDtos);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(result);
+    }
 
 }
