@@ -7,19 +7,24 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.lang.annotation.Documented;
+import java.math.BigDecimal;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Topic {
+public class TakeQuiz {
 
     @DocumentId
     private String id;
-    private String name;
-    private String description;
+    private String quiz_id;
+    private String player_id;
+    private String player_name;
+    private BigDecimal score;
     private Status status;
-    private Timestamp createdAt;
-    private Timestamp updatedAt;
+    private Timestamp start_time;
+    private Timestamp end_time;
+    private Timestamp created_at;
+    private Timestamp updated_at;
+
 }

@@ -1,0 +1,23 @@
+package com.myproject.quizzai.dto;
+
+import com.google.cloud.Timestamp;
+import com.myproject.quizzai.model.Status;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Builder;
+import lombok.Data;
+
+import java.util.List;
+
+@Data
+@Builder
+@Schema(title = "QuestionResponse", accessMode = Schema.AccessMode.READ_ONLY)
+public class QuestionResponseDto {
+    private String id;
+    private String quiz_id;
+    private String content;
+    private List<String> answers;
+    private String correct_answer;
+    private Status status;
+    private Timestamp createdAt;
+    private Timestamp updatedAt;
+}

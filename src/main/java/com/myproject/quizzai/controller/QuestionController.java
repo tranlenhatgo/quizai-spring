@@ -27,7 +27,7 @@ public class QuestionController {
 
     private static final Logger logger = LoggerFactory.getLogger(QuestionController.class);
 
-    //POST /questions
+    //POST /question
     @PostMapping
     @Operation(summary = "Create a list of questions for a quiz")
     public ResponseEntity<Map<String,String>> createQuestions(
@@ -37,6 +37,34 @@ public class QuestionController {
         Map<String,String> result = questionService.createQuestions(questionDtos);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(result);
+    }
+
+    //GET /question?quizId={quizId}
+    @GetMapping
+    @Operation(summary = "Get list question by quiz ID")
+    public ResponseEntity<List<Question>> getQuestionsByQuizId(@RequestParam String quizId) {
+        logger.info("getQuestionsByQuizId() method called with quiz ID: {}", quizId);
+
+        List<Question> questions = questionService.getQuestionsByQuizId(quizId);
+        if (questions != null && !questions.isEmpty()) {
+            return ResponseEntity.ok(questions);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
+    //GET /question/{id}
+    @GetMapping
+    @Operation(summary = "Get question by ID")
+    public ResponseEntity<Question> getQuestionById(@PathVariable String id) {
+        logger.info("getQuestionById() method called with ID: {}", id);
+
+        Question question = questionService.getQuestionById(id);
+        if (question != null) {
+            return ResponseEntity.ok(question);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 
 }

@@ -3,14 +3,14 @@ package com.myproject.quizzai.dto;
 import com.google.cloud.Timestamp;
 import com.myproject.quizzai.model.Status;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.Builder;
 
 import java.util.List;
 
-@Getter
-@Setter
+@Data
 @Builder
 @Schema(title = "QuizResponse", accessMode = Schema.AccessMode.READ_ONLY)
 public class QuizResponseDto {
