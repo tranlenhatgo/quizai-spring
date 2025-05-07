@@ -4,6 +4,7 @@ import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.cloud.firestore.QuerySnapshot;
 import com.myproject.quizzai.dto.QuestionCreationRequestDto;
+import com.myproject.quizzai.dto.QuestionResponseDto;
 import com.myproject.quizzai.model.Question;
 import com.myproject.quizzai.utils.IdUtil;
 import lombok.RequiredArgsConstructor;
@@ -31,46 +32,50 @@ public class QuestionService {
         Map<String, String> result = new HashMap<>();
 
         for (QuestionCreationRequestDto questionDto : questionDtos) {
-            try {
-                String questionId = IdUtil.generateId();
-                Question question = Question.builder()
-                        .id(questionId)
-                        .quiz_id(questionDto.getQuiz_id())
-                        .content(questionDto.getContent())
-                        .answers(questionDto.getAnswers())
-                        .correct_answer(questionDto.getCorrect_answer())
-                        .status(questionDto.getStatus())
-                        .createdAt(questionDto.getCreatedAt())
-                        .updatedAt(questionDto.getUpdatedAt())
-                        .build();
+            String questionId = IdUtil.generateId();
+            Question question = Question.builder()
+                    .id(questionId)
+                    .quiz_id(questionDto.getQuiz_id())
+                    .content(questionDto.getContent())
+                    .answers(questionDto.getAnswers())
+                    .correct_answer(questionDto.getCorrect_answer())
+                    .status(questionDto.getStatus())
+                    .createdAt(questionDto.getCreatedAt())
+                    .updatedAt(questionDto.getUpdatedAt())
+                    .build();
 
-                firestore.collection("questions").document(questionId).set(question).get();
-                result.put(questionId, "Success");
-            } catch (Exception e) {
-                result.put("unknown", "Fail: " + e.getMessage());
-            }
+            firestore.collection("questions").document(questionId).set(question).get();
+            result.put(questionId, "Success");
         }
 
         return result;
     }
 
-    public List<Question> getQuestionsByQuizId(String quizId) {
-        List<Question> questions = new ArrayList<>();
-        try {
-            ApiFuture<QuerySnapshot> future = firestore.collection("questions")
-                    .whereEqualTo("quiz_id", quizId)
-                    .get();
-            QuerySnapshot querySnapshot = future.get();
-            for (QueryDocumentSnapshot document : querySnapshot.getDocuments()) {
-                Question question = document.toObject(Question.class);
-                questions.add(question);
-            }
-        } catch (Exception e) {
-            logger.error("Error fetching questions for quizId {}: {}", quizId, e.getMessage());
-        }
-        return questions;
+    @SneakyThrows
+    public List<QuestionResponseDto> getQuestionsByQuizId(String quizId) {
+        List<QuestionResponseDto> questionDtos = new ArrayList<>();
+
+        ApiFuture<QuerySnapshot> future = firestore.collection("questions")
+                .whereEqualTo("quiz_id", quizId)
+                .get();
+        QuerySnapshot querySnapshot = future.get();
+        for (QueryDocumentSnapshot document : querySnapshot.getDocuments()) {
+            Question question = document.toObject(Question.class);
+            QuestionResponseDto questionDto = QuestionResponseDto.builder()
+                    .id(question.getId())
+                    .quizId(question.getQuiz_id())
+                    .question(question.getContent())
+                    .answers(question.getAnswers())
+                    .correctAnswer(question.getCorrect_answer())
+                    .status(question.getStatus())
+                    .createdAt(question.getCreatedAt())
+                    .updatedAt(question.getUpdatedAt())
+                    .build();
+            questionDtos.add(questionDto);}
+        return questionDtos;
     }
 
+    @SneakyThrows
     public Question getQuestionById(String id) {
         try {
             ApiFuture<QuerySnapshot> future = firestore.collection("questions")

@@ -1,6 +1,7 @@
 package com.myproject.quizzai.controller;
 
 import com.myproject.quizzai.dto.QuestionCreationRequestDto;
+import com.myproject.quizzai.dto.QuestionResponseDto;
 import com.myproject.quizzai.model.Question;
 import com.myproject.quizzai.service.QuestionService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -12,7 +13,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -42,10 +42,10 @@ public class QuestionController {
     //GET /question?quizId={quizId}
     @GetMapping
     @Operation(summary = "Get list question by quiz ID")
-    public ResponseEntity<List<Question>> getQuestionsByQuizId(@RequestParam String quizId) {
+    public ResponseEntity<List<QuestionResponseDto>> getQuestionsByQuizId(@RequestParam String quizId) {
         logger.info("getQuestionsByQuizId() method called with quiz ID: {}", quizId);
 
-        List<Question> questions = questionService.getQuestionsByQuizId(quizId);
+        List<QuestionResponseDto> questions = questionService.getQuestionsByQuizId(quizId);
         if (questions != null && !questions.isEmpty()) {
             return ResponseEntity.ok(questions);
         } else {
@@ -54,7 +54,7 @@ public class QuestionController {
     }
 
     //GET /question/{id}
-    @GetMapping
+    @GetMapping("/{id}")
     @Operation(summary = "Get question by ID")
     public ResponseEntity<Question> getQuestionById(@PathVariable String id) {
         logger.info("getQuestionById() method called with ID: {}", id);
