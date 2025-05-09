@@ -15,7 +15,7 @@ public class TakeQuestion {
 
     @DocumentId
     private String id;
-    private String quiz_id;
+    private String take_id; //take_quiz_id
     private String question_id;
     private String answer;
     private String check_answer;

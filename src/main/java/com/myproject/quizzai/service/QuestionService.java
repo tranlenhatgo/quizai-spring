@@ -1,11 +1,13 @@
 package com.myproject.quizzai.service;
 
+import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.cloud.firestore.QuerySnapshot;
 import com.myproject.quizzai.dto.QuestionCreationRequestDto;
 import com.myproject.quizzai.dto.QuestionResponseDto;
 import com.myproject.quizzai.model.Question;
+import com.myproject.quizzai.model.Status;
 import com.myproject.quizzai.utils.IdUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -39,9 +41,9 @@ public class QuestionService {
                     .content(questionDto.getContent())
                     .answers(questionDto.getAnswers())
                     .correct_answer(questionDto.getCorrect_answer())
-                    .status(questionDto.getStatus())
-                    .createdAt(questionDto.getCreatedAt())
-                    .updatedAt(questionDto.getUpdatedAt())
+                    .status(Status.ACTIVE)
+                    .createdAt(Timestamp.now())
+                    .updatedAt(Timestamp.now())
                     .build();
 
             firestore.collection("questions").document(questionId).set(question).get();

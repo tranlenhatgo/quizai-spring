@@ -1,5 +1,6 @@
 package com.myproject.quizzai.service;
 
+import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.Firestore;
 import com.myproject.quizzai.utils.IdUtil;
 import com.myproject.quizzai.dto.QuizCreationRequestDto;
@@ -27,7 +28,7 @@ public class QuizService {
                 .categories_id(quizCreationRequest.getCategories_id())
                 .start_time(quizCreationRequest.getStart_time())
                 .end_time(quizCreationRequest.getEnd_time())
-                .createdAt(quizCreationRequest.getCreated_at())
+                .createdAt(Timestamp.now())
                 .updatedAt(quizCreationRequest.getUpdated_at())
                 .build();
 
