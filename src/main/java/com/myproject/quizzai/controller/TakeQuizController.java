@@ -1,6 +1,7 @@
 package com.myproject.quizzai.controller;
 
-import com.myproject.quizzai.dto.QuizStartRequest;
+import com.myproject.quizzai.dto.TakeQuizEndRequestDto;
+import com.myproject.quizzai.dto.TakeQuizStartRequestDto;
 import com.myproject.quizzai.dto.TakeQuizStartResponseDto;
 import com.myproject.quizzai.service.TakeQuizService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -22,14 +23,28 @@ public class TakeQuizController {
 
     private final TakeQuizService takeQuizService;
 
+    //POST /take-quiz/start
     @PostMapping("/start")
     @Operation(summary = "Start a quiz")
-    public ResponseEntity<TakeQuizStartResponseDto> StartQuiz(@RequestBody QuizStartRequest quizStartRequest) {
-        logger.info("StartQuiz() method called with quiz ID: {}", quizStartRequest.getQuizId());
+    public ResponseEntity<TakeQuizStartResponseDto> StartQuiz(@RequestBody TakeQuizStartRequestDto takeQuizDto) {
+        logger.info("StartQuiz() method called with quiz ID: {}", takeQuizDto.getQuizId());
 
-        TakeQuizStartResponseDto startResponseDto = takeQuizService.StartQuiz(quizStartRequest.getQuizId(),
-                quizStartRequest.getPlayerName());
+        TakeQuizStartResponseDto startResponseDto = takeQuizService.StartQuiz(takeQuizDto);
 
         return new ResponseEntity<>(startResponseDto, HttpStatus.OK);
     }
+
+    //GET /take-quiz/end
+    @PostMapping("/end")
+    @Operation(summary = "End a quiz")
+    public ResponseEntity<String> EndQuiz(@RequestBody TakeQuizEndRequestDto takeQuizDto) {
+        logger.info("EndQuiz() method called with take ID: {}", takeQuizDto.getTakeId());
+
+        takeQuizService.EndQuiz(takeQuizDto);
+
+        String response = "Quiz ended successfully";
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+
 }

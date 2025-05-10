@@ -2,8 +2,7 @@ package com.myproject.quizzai.service;
 
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.Firestore;
-import com.myproject.quizzai.dto.QuestionResponseDto;
-import com.myproject.quizzai.dto.TakeQuizStartResponseDto;
+import com.myproject.quizzai.dto.*;
 import com.myproject.quizzai.model.Status;
 import com.myproject.quizzai.model.TakeQuiz;
 import com.myproject.quizzai.utils.IdUtil;
@@ -21,10 +20,14 @@ public class TakeQuizService {
 
     private final Firestore firestore;
     private static final Logger logger = LoggerFactory.getLogger(TakeQuizService.class);
+
     private final QuestionService questionService;
+    private final TakeQuestionService takeQuestionService;
 
     @SneakyThrows
-    public TakeQuizStartResponseDto StartQuiz(String quizId, String playerName) {
+    public TakeQuizStartResponseDto StartQuiz(TakeQuizStartRequestDto takeQuizDto) {
+        String quizId = takeQuizDto.getQuizId();
+        String playerName = takeQuizDto.getPlayerName();
 
         List<QuestionResponseDto> questionDtos = questionService.getQuestionsByQuizId(quizId);
 
@@ -45,5 +48,49 @@ public class TakeQuizService {
         return new TakeQuizStartResponseDto(id,questionDtos);
     }
 
+    // Method to save a taken quiz
+    @SneakyThrows
+    public void EndQuiz(TakeQuizEndRequestDto takeQuizDto) {
+
+        String takeId = takeQuizDto.getTakeId();
+        List<TakeQuestionSaveRequestDto> takeQuestionDtos = takeQuizDto.getTakeQuestionSaveRequestDtos();
+
+        takeQuestionService.saveTakeQuestions(takeId,takeQuestionDtos);
+
+        String score = takeQuestionService.getScore(takeId);
+        TakeQuiz oldTakeQuiz = firestore.collection("take_quiz").document(takeId).get().get().toObject(TakeQuiz.class);
+        assert oldTakeQuiz != null;
+
+        TakeQuiz takeQuiz = TakeQuiz.builder()
+                .id(takeId)
+                .quiz_id(oldTakeQuiz.getQuiz_id())
+                .player_name(oldTakeQuiz.getPlayer_name())
+                .score(score)
+                .status(Status.ACTIVE)
+                .start_time(oldTakeQuiz.getStart_time())
+                .end_time(Timestamp.now())
+                .created_at(oldTakeQuiz.getCreated_at())
+                .updated_at(Timestamp.now())
+                .build();
+
+        // Update the quiz status and score in Firestore
+        firestore.collection("take_quiz").document(takeId).set(takeQuiz).get();
+    }
+
+    // Method to get a taken quiz by ID
+    @SneakyThrows
+    public TakeQuiz getTakeQuizById(String id) {
+        return firestore.collection("take_quiz").document(id).get().get().toObject(TakeQuiz.class);
+    }
+
+    // Method to return a list of taken quiz by take quiz ID
+    @SneakyThrows
+    public List<TakeQuiz> getTakeQuizByQuizId(String quizId) {
+        return firestore.collection("take_quiz")
+                .whereEqualTo("quiz_id", quizId)
+                .get()
+                .get()
+                .toObjects(TakeQuiz.class);
+    }
 
 }

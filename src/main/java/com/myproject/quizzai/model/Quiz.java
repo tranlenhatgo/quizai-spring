@@ -21,10 +21,10 @@ public class Quiz {
     private String title;
     private String description;
     private Status status;
-    private List<String> categories_id;
-    private String code;
+    private List<Category> categories;
     private Timestamp start_time;
     private Timestamp end_time;
     private Timestamp createdAt;
     private Timestamp updatedAt;
+
 }

@@ -19,7 +19,4 @@ public class QuestionResponseDto {
     private String question;
     private List<String> answers;
     private String correctAnswer;
-    private Status status;
-    private Timestamp createdAt;
-    private Timestamp updatedAt;
 }

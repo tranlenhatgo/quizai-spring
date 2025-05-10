@@ -22,10 +22,9 @@ import java.util.Map;
 @Tag(name = "Question Controller", description = "Controller for managing questions")
 public class QuestionController {
     public static final String ROOT_MAPPING = "question";
+    private static final Logger logger = LoggerFactory.getLogger(QuestionController.class);
 
     private final QuestionService questionService;
-
-    private static final Logger logger = LoggerFactory.getLogger(QuestionController.class);
 
     //POST /question
     @PostMapping
@@ -53,8 +52,8 @@ public class QuestionController {
         }
     }
 
-    //GET /question/{id}
-    @GetMapping("/{id}")
+    //GET /question/id={id}
+    @GetMapping("/id={id}")
     @Operation(summary = "Get question by ID")
     public ResponseEntity<Question> getQuestionById(@PathVariable String id) {
         logger.info("getQuestionById() method called with ID: {}", id);

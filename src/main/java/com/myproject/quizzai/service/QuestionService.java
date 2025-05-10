@@ -4,6 +4,7 @@ import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.cloud.firestore.QuerySnapshot;
+import com.google.cloud.firestore.DocumentSnapshot;
 import com.myproject.quizzai.dto.QuestionCreationRequestDto;
 import com.myproject.quizzai.dto.QuestionResponseDto;
 import com.myproject.quizzai.model.Question;
@@ -46,7 +47,7 @@ public class QuestionService {
                     .updatedAt(Timestamp.now())
                     .build();
 
-            firestore.collection("questions").document(questionId).set(question).get();
+            firestore.collection("question").document(questionId).set(question).get();
             result.put(questionId, "Success");
         }
 
@@ -57,7 +58,7 @@ public class QuestionService {
     public List<QuestionResponseDto> getQuestionsByQuizId(String quizId) {
         List<QuestionResponseDto> questionDtos = new ArrayList<>();
 
-        ApiFuture<QuerySnapshot> future = firestore.collection("questions")
+        ApiFuture<QuerySnapshot> future = firestore.collection("question")
                 .whereEqualTo("quiz_id", quizId)
                 .get();
         QuerySnapshot querySnapshot = future.get();
@@ -69,9 +70,6 @@ public class QuestionService {
                     .question(question.getContent())
                     .answers(question.getAnswers())
                     .correctAnswer(question.getCorrect_answer())
-                    .status(question.getStatus())
-                    .createdAt(question.getCreatedAt())
-                    .updatedAt(question.getUpdatedAt())
                     .build();
             questionDtos.add(questionDto);}
         return questionDtos;
@@ -79,18 +77,7 @@ public class QuestionService {
 
     @SneakyThrows
     public Question getQuestionById(String id) {
-        try {
-            ApiFuture<QuerySnapshot> future = firestore.collection("questions")
-                    .whereEqualTo("id", id)
-                    .get();
-            QuerySnapshot querySnapshot = future.get();
-            if (!querySnapshot.isEmpty()) {
-                QueryDocumentSnapshot document = querySnapshot.getDocuments().get(0);
-                return document.toObject(Question.class);
-            }
-        } catch (Exception e) {
-            logger.error("Error fetching question by ID {}: {}", id, e.getMessage());
-        }
-        return null;
+        DocumentSnapshot document = firestore.collection("question").document(id).get().get();
+        return document.exists() ? document.toObject(Question.class) : null;
     }
 }

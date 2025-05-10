@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 @Schema(title = "Quiz Start Request", accessMode = Schema.AccessMode.WRITE_ONLY)
-public class QuizStartRequest {
+public class TakeQuizStartRequestDto {
     @NotBlank(message = "Quiz ID cannot be blank")
     @Schema(requiredMode = Schema.RequiredMode.REQUIRED)
     private String quizId;

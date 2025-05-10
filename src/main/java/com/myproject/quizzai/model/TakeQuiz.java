@@ -20,7 +20,7 @@ public class TakeQuiz {
     private String quiz_id;
     private String player_id;
     private String player_name;
-    private BigDecimal score;
+    private String score;
     private Status status;
     private Timestamp start_time;
     private Timestamp end_time;
