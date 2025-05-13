@@ -8,5 +8,4 @@ This project is developed using Java Spring, utilizes Firebase as the database, 
 - Join and play a quiz using its ID
 - Ask AI for answers to quiz questions
 # Class Diagram
-![image](https://github.com/user-attachments/assets/49ebf169-894e-4444-97af-90a521630265)
-
+<img src="https://github.com/user-attachments/assets/49ebf169-894e-4444-97af-90a521630265" alt="Class Diagram" width="500"/>
