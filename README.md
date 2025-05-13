@@ -9,3 +9,6 @@ This project is developed using Java Spring, utilizes Firebase as the database, 
 - Ask AI for answers to quiz questions
 # Class Diagram
 <img src="https://github.com/user-attachments/assets/49ebf169-894e-4444-97af-90a521630265" alt="Class Diagram" width="500"/>
+# n8n Diagram
+<img src="https://github.com/user-attachments/assets/6fa8512a-9743-4e2f-a6c8-725268de7d80" alt="Class Diagram" width="500"/>
+
