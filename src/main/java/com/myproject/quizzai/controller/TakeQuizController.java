@@ -13,6 +13,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping(TakeQuizController.ROOT_MAPPING)
 @RequiredArgsConstructor
@@ -37,12 +39,12 @@ public class TakeQuizController {
     //GET /take-quiz/end
     @PostMapping("/end")
     @Operation(summary = "End a quiz")
-    public ResponseEntity<String> EndQuiz(@RequestBody TakeQuizEndRequestDto takeQuizDto) {
+    public ResponseEntity<Map<String, String>> EndQuiz(@RequestBody TakeQuizEndRequestDto takeQuizDto) {
         logger.info("EndQuiz() method called with take ID: {}", takeQuizDto.getTakeId());
 
         takeQuizService.EndQuiz(takeQuizDto);
 
-        String response = "Quiz ended successfully";
+        Map<String, String> response = Map.of("message", "Quiz ended successfully");
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

@@ -9,4 +9,8 @@ public enum Category {
     SPORTS,
     ENTERTAINMENT,
     MATH,
+    ART,
+    SPACE,
+    GENERAL_CULTURE,
 }
+

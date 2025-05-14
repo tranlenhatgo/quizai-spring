@@ -26,6 +26,8 @@ public class TakeQuestionSaveRequestDto {
     public void setCheck_answer(String check_answer) {
         if (Objects.equals(check_answer, "1")) {
             this.check_answer = CheckAnswer.CORRECT;
+        } else if (Objects.equals(check_answer,  "2")) {
+            this.check_answer = CheckAnswer.CORRECT;
         } else if (Objects.equals(check_answer, "-1")) {
             this.check_answer = CheckAnswer.INCORRECT;
         } else {
