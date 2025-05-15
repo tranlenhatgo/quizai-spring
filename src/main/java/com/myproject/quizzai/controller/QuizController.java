@@ -1,6 +1,7 @@
 package com.myproject.quizzai.controller;
 
 import com.myproject.quizzai.dto.QuizCreationRequestDto;
+import com.myproject.quizzai.dto.QuizResponseDto;
 import com.myproject.quizzai.service.QuizService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -12,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -21,10 +23,9 @@ import java.util.Map;
 @Tag(name = "Quiz Controller", description = "Controller for managing quizzes")
 public class QuizController {
     public static final String ROOT_MAPPING = "quiz";
+    private static final Logger logger = LoggerFactory.getLogger(QuizController.class);
 
     private final QuizService quizService;
-
-    private static final Logger logger = LoggerFactory.getLogger(QuizController.class);
 
     //POST /quiz
     @PostMapping
@@ -40,17 +41,17 @@ public class QuizController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    //GET /quiz?id={id}
-//    @GetMapping
-//    @Operation(summary = "Get quiz by ID")
-//    public ResponseEntity<QuizResponseDto> getQuizById(@RequestParam String id) {
-//        logger.info("getQuizById() method called with ID: {}", id);
-//
-//        QuizResponseDto quiz = quizService.getQuizById(id);
-//        if (quiz != null) {
-//            return ResponseEntity.ok(quiz);
-//        } else {
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-//        }
-//    }
+    // Find quiz by User ID
+    @GetMapping
+    @Operation(summary = "Get quiz by user ID")
+    public ResponseEntity<List<QuizResponseDto>> getQuizByUserId(@RequestParam String userId) {
+        logger.info("getQuizByUserId() method called with user ID: {}", userId);
+
+        List<QuizResponseDto> quiz = quizService.getQuizByUserId(userId);
+        if (quiz != null && !quiz.isEmpty()) {
+            return ResponseEntity.ok(quiz);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
 }

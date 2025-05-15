@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.SneakyThrows;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +18,7 @@ import java.util.List;
 @Schema(title = "Quiz Creation Request DTO", accessMode = Schema.AccessMode.WRITE_ONLY)
 public class QuizCreationRequestDto {
 
-    private String host_id;
+    private String user_id;
 
     @NotBlank(message = "Title cannot be blank")
     @Schema(requiredMode = Schema.RequiredMode.REQUIRED)
@@ -36,15 +37,13 @@ public class QuizCreationRequestDto {
     @JsonDeserialize(using = TimestampDeserializer.class)
     private Timestamp end_time;
 
-
+    @SneakyThrows
     public List<Category> getCategories() {
         List<Category> categoriesEnum = new ArrayList<>();
 
-        for (String category : this.categories) {
-            try {
+        if (this.categories != null) {
+            for (String category : this.categories) {
                 categoriesEnum.add(Category.valueOf(category));
-            } catch (IllegalArgumentException e) {
-                // Log or handle invalid category strings if necessary
             }
         }
         return categoriesEnum;

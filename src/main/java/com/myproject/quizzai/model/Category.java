@@ -12,5 +12,10 @@ public enum Category {
     ART,
     SPACE,
     GENERAL_CULTURE,
+    ;
+
+    public String getName() {
+        return this.name();
+    }
 }
 

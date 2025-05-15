@@ -11,6 +11,8 @@ public class TakeQuizStartRequestDto {
     @Schema(requiredMode = Schema.RequiredMode.REQUIRED)
     private String quizId;
 
+    private String playerId;
+
     @NotBlank(message = "Player ID cannot be blank")
     @Schema(requiredMode = Schema.RequiredMode.REQUIRED)
     private String playerName;

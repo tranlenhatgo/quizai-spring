@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -22,6 +23,7 @@ public class TakeQuizService {
     private static final Logger logger = LoggerFactory.getLogger(TakeQuizService.class);
 
     private final QuestionService questionService;
+    private final QuizService quizService;
     private final TakeQuestionService takeQuestionService;
 
     @SneakyThrows
@@ -36,6 +38,7 @@ public class TakeQuizService {
         TakeQuiz takeQuiz = TakeQuiz.builder()
                 .id(id)
                 .quiz_id(quizId)
+                .player_id(takeQuizDto.getPlayerId())
                 .player_name(playerName)
                 .status(Status.PENDING)
                 .start_time(Timestamp.now())
@@ -61,9 +64,12 @@ public class TakeQuizService {
         TakeQuiz oldTakeQuiz = firestore.collection("take_quiz").document(takeId).get().get().toObject(TakeQuiz.class);
         assert oldTakeQuiz != null;
 
+
+
         TakeQuiz takeQuiz = TakeQuiz.builder()
                 .id(takeId)
                 .quiz_id(oldTakeQuiz.getQuiz_id())
+                .player_id(oldTakeQuiz.getPlayer_id())
                 .player_name(oldTakeQuiz.getPlayer_name())
                 .score(score)
                 .status(Status.ACTIVE)
@@ -93,4 +99,31 @@ public class TakeQuizService {
                 .toObjects(TakeQuiz.class);
     }
 
+    // Method to return a list of taken quiz by player ID
+    @SneakyThrows
+    public List<TakeQuizResponseDto> getTakeQuizByPlayerId(String playerId){
+        List<TakeQuiz> takeQuizzes = firestore.collection("take_quiz")
+                .whereEqualTo("player_id", playerId)
+                .get()
+                .get()
+                .toObjects(TakeQuiz.class);
+
+        List<TakeQuizResponseDto> takeQuizResponseDtos = new ArrayList<>();
+
+        for (TakeQuiz takeQuiz : takeQuizzes) {
+            String quizId = takeQuiz.getQuiz_id();
+            String quizTitle = quizService.getQuizById(quizId).getTitle();
+
+            TakeQuizResponseDto takeQuizResponseDto = TakeQuizResponseDto.builder()
+                    .quizId(quizId)
+                    .quizTitle(quizTitle)
+                    .score(takeQuiz.getScore())
+                    .status(takeQuiz.getStatus().toString())
+                    .updatedAt(takeQuiz.getUpdated_at().toString())
+                    .build();
+
+            takeQuizResponseDtos.add(takeQuizResponseDto);
+        }
+        return takeQuizResponseDtos;
+    }
 }

@@ -22,7 +22,10 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class n8nService {
     private static final Logger logger = LoggerFactory.getLogger(n8nService.class);
-    private static final String N8N_WEBHOOK_URL = "http://localhost:5678/webhook-test";
+
+    private static final String URL = "http://localhost:5678";  // Replace with ngrok instance URL
+
+    private static final String N8N_WEBHOOK_URL =  URL+"/webhook-test";
 
     private final RestTemplate restTemplate;
 
