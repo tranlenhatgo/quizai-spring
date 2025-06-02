@@ -7,9 +7,13 @@ This project is developed using Java Spring, utilizes Firebase as the database, 
 - Generate quizzes using AI from a file input
 - Join and play a quiz using its ID
 - Ask AI for answers to quiz questions
-# Class Diagram
-<img src="https://github.com/user-attachments/assets/49ebf169-894e-4444-97af-90a521630265" alt="Class Diagram" width="500"/>
+  
+# Full Video Demo
+(https://drive.google.com/file/d/1mnVpyUHS3jMu1gPF9UwyloL570Wml6u3/view?usp=sharing)
 
-# n8n Diagram
-<img src="https://github.com/user-attachments/assets/6fa8512a-9743-4e2f-a6c8-725268de7d80" alt="Class Diagram" width="700"/>
+# E - R Diagram 
+<img src="https://github.com/user-attachments/assets/7f4c67b9-6f9c-4b3a-9e8a-9f83a9b9740b" width="600"/>
+
+# n8n Structure
+![image](https://github.com/user-attachments/assets/c4996c74-e672-44a4-a00e-71ceb2078813)
 
