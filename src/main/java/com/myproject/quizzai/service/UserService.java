@@ -2,9 +2,11 @@ package com.myproject.quizzai.service;
 
 import com.myproject.quizzai.dto.UserQuizResponseDto;
 import lombok.SneakyThrows;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
 @Service
+@ConditionalOnProperty(name = "app.use-mock-services", havingValue = "false", matchIfMissing = false)
 public class UserService {
 
     private final QuizService quizService;

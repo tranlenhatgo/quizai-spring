@@ -2,12 +2,15 @@ package com.myproject.quizzai.controller;
 
 import com.myproject.quizzai.dto.NewsVerificationRequestDto;
 import com.myproject.quizzai.dto.NewsVerificationResponseDto;
+import com.myproject.quizzai.service.MockNewsVerificationService;
 import com.myproject.quizzai.service.NewsVerificationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +21,6 @@ import java.util.Map;
 
 @RestController
 @RequestMapping(NewsVerificationController.ROOT_MAPPING)
-@RequiredArgsConstructor
 @Tag(name = "News Verification Controller", description = "Controller for verifying news authenticity and accuracy")
 public class NewsVerificationController {
     
@@ -26,6 +28,18 @@ public class NewsVerificationController {
     private static final Logger logger = LoggerFactory.getLogger(NewsVerificationController.class);
 
     private final NewsVerificationService newsVerificationService;
+    private final MockNewsVerificationService mockNewsVerificationService;
+
+    public NewsVerificationController(
+            @Autowired(required = false) NewsVerificationService newsVerificationService,
+            @Autowired(required = false) MockNewsVerificationService mockNewsVerificationService) {
+        this.newsVerificationService = newsVerificationService;
+        this.mockNewsVerificationService = mockNewsVerificationService;
+    }
+
+    private Object getActiveService() {
+        return mockNewsVerificationService != null ? mockNewsVerificationService : newsVerificationService;
+    }
 
     @PostMapping
     @Operation(summary = "Submit news content for verification")
@@ -33,7 +47,12 @@ public class NewsVerificationController {
         logger.info("submitForVerification() method called with content: {}", request.getContent());
 
         try {
-            String verificationId = newsVerificationService.createVerification(request);
+            String verificationId;
+            if (mockNewsVerificationService != null) {
+                verificationId = mockNewsVerificationService.createVerification(request);
+            } else {
+                verificationId = newsVerificationService.createVerification(request);
+            }
             
             Map<String, String> response = new HashMap<>();
             response.put("verificationId", verificationId);
@@ -54,7 +73,13 @@ public class NewsVerificationController {
     public ResponseEntity<NewsVerificationResponseDto> getVerificationResult(@PathVariable String verificationId) {
         logger.info("getVerificationResult() method called with ID: {}", verificationId);
 
-        NewsVerificationResponseDto result = newsVerificationService.getVerificationResult(verificationId);
+        NewsVerificationResponseDto result;
+        if (mockNewsVerificationService != null) {
+            result = mockNewsVerificationService.getVerificationResult(verificationId);
+        } else {
+            result = newsVerificationService.getVerificationResult(verificationId);
+        }
+        
         if (result != null) {
             return ResponseEntity.ok(result);
         } else {
@@ -68,7 +93,13 @@ public class NewsVerificationController {
         logger.info("processVerification() method called with ID: {}", verificationId);
 
         try {
-            NewsVerificationResponseDto result = newsVerificationService.processVerification(verificationId);
+            NewsVerificationResponseDto result;
+            if (mockNewsVerificationService != null) {
+                result = mockNewsVerificationService.processVerification(verificationId);
+            } else {
+                result = newsVerificationService.processVerification(verificationId);
+            }
+            
             if (result != null) {
                 return ResponseEntity.ok(result);
             } else {
@@ -86,7 +117,12 @@ public class NewsVerificationController {
         logger.info("getAutocompleteSuggestions() method called with query: {}", query);
 
         try {
-            List<String> suggestions = newsVerificationService.getAutocompleteSuggestions(query);
+            List<String> suggestions;
+            if (mockNewsVerificationService != null) {
+                suggestions = mockNewsVerificationService.getAutocompleteSuggestions(query);
+            } else {
+                suggestions = newsVerificationService.getAutocompleteSuggestions(query);
+            }
             return ResponseEntity.ok(suggestions);
         } catch (Exception e) {
             logger.error("Error getting autocomplete suggestions", e);
@@ -100,16 +136,23 @@ public class NewsVerificationController {
         logger.info("verifyNews() method called with content: {}", request.getContent());
 
         try {
-            // Create verification record
-            String verificationId = newsVerificationService.createVerification(request);
-            
-            // Immediately process it
-            NewsVerificationResponseDto result = newsVerificationService.processVerification(verificationId);
-            
-            if (result != null) {
+            if (mockNewsVerificationService != null) {
+                // For mock service, create and return immediately
+                String verificationId = mockNewsVerificationService.createVerification(request);
+                NewsVerificationResponseDto result = mockNewsVerificationService.getVerificationResult(verificationId);
                 return ResponseEntity.ok(result);
             } else {
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+                // Create verification record
+                String verificationId = newsVerificationService.createVerification(request);
+                
+                // Immediately process it
+                NewsVerificationResponseDto result = newsVerificationService.processVerification(verificationId);
+                
+                if (result != null) {
+                    return ResponseEntity.ok(result);
+                } else {
+                    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+                }
             }
         } catch (Exception e) {
             logger.error("Error verifying news", e);

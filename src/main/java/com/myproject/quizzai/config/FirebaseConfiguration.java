@@ -8,6 +8,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.cloud.FirestoreClient;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -15,6 +16,7 @@ import java.io.FileInputStream;
 
 @Configuration
 @RequiredArgsConstructor
+@ConditionalOnProperty(name = "app.use-mock-services", havingValue = "false", matchIfMissing = false)
 public class FirebaseConfiguration {
 
     @Bean

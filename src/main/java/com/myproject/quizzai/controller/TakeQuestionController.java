@@ -5,11 +5,13 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(TakeQuestionController.ROOT_MAPPING)
 @RequiredArgsConstructor
+@ConditionalOnProperty(name = "app.use-mock-services", havingValue = "false", matchIfMissing = false)
 @Tag(name = "Take Question Controller", description = "Controller for managing questions taken by players")
 public class TakeQuestionController {
     public static final String ROOT_MAPPING = "take-question";
