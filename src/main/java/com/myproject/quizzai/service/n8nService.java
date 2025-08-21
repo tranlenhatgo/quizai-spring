@@ -2,6 +2,7 @@ package com.myproject.quizzai.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.myproject.quizzai.dto.MultipartInputStreamFileResource;
+import com.myproject.quizzai.dto.NewsVerificationN8nResponseDto;
 import com.myproject.quizzai.dto.QuizResponseN8n;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -73,6 +74,29 @@ public class n8nService {
         } catch (Exception e) {
             logger.error("Error while sending request to n8n: {}", e.getMessage());
             throw new RuntimeException("Failed to send webhook to n8n", e);
+        }
+    }
+
+    public ResponseEntity<NewsVerificationN8nResponseDto.Output> getNewsVerificationFromN8n(String content) {
+        String verificationUrl = N8N_WEBHOOK_URL + "/verify-news";
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        String requestPayload = String.format("{\"content\": \"%s\"}", content.replace("\"", "\\\""));
+        HttpEntity<String> request = new HttpEntity<>(requestPayload, headers);
+
+        try {
+            ResponseEntity<String> response = restTemplate.postForEntity(verificationUrl, request, String.class);
+            logger.info("Received news verification response from n8n: {}", response.getBody());
+
+            ObjectMapper objectMapper = new ObjectMapper();
+            NewsVerificationN8nResponseDto verificationResponse = objectMapper.readValue(response.getBody(), NewsVerificationN8nResponseDto.class);
+
+            return ResponseEntity.status(response.getStatusCode()).body(verificationResponse.getOutput());
+        } catch (Exception e) {
+            logger.error("Error while sending news verification request to n8n: {}", e.getMessage());
+            throw new RuntimeException("Failed to send news verification webhook to n8n", e);
         }
     }
 }
